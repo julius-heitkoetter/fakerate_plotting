@@ -226,6 +226,7 @@ void plotFakenew::sbsDistributions(TChain *tC, string sample = "bla", string wha
   Bool_t Muon_mediumId[150];
   Bool_t Muon_isGlobal[150];
   Bool_t Muon_isTracker[150];
+  Bool_t Muon_highPurity[150];
   Bool_t Muon_looseId[150];
   Float_t MuonId_hlt_pt[150];
   Int_t MuonId_hlt_lowmass[150];
@@ -278,6 +279,7 @@ void plotFakenew::sbsDistributions(TChain *tC, string sample = "bla", string wha
   TBranch *b_Muon_mediumId;
   TBranch *b_Muon_isGlobal;
   TBranch *b_Muon_isTracker;
+  TBranch *b_Muon_highPurity;
   TBranch *b_Muon_looseId;
   TBranch *b_MuonId_hlt_pt;
   TBranch *b_MuonId_hlt_lowmass;
@@ -335,6 +337,7 @@ void plotFakenew::sbsDistributions(TChain *tC, string sample = "bla", string wha
   tC->SetBranchAddress("Muon_mediumId", Muon_mediumId, &b_Muon_mediumId);
   tC->SetBranchAddress("Muon_isGlobal", Muon_isGlobal, &b_Muon_isGlobal);
   tC->SetBranchAddress("Muon_isTracker", Muon_isTracker, &b_Muon_isTracker);
+  tC->SetBranchAddress("Muon_highPurity", Muon_highPurity, &b_Muon_highPurity);
   tC->SetBranchAddress("Muon_looseId", Muon_looseId, &b_Muon_looseId);
 
   if (string::npos != sample.find("DoubleMuMu"))
@@ -578,6 +581,7 @@ void plotFakenew::sbsDistributions(TChain *tC, string sample = "bla", string wha
     b_Muon_mediumId->GetEntry(localEntry);
     b_Muon_isGlobal->GetEntry(localEntry);
     b_Muon_isTracker->GetEntry(localEntry);
+    b_Muon_highPurity->GetEntry(localEntry);
     b_Muon_looseId->GetEntry(localEntry);
     b_nMuon->GetEntry(localEntry);
     b_Muon_pt->GetEntry(localEntry);
@@ -658,7 +662,7 @@ void plotFakenew::sbsDistributions(TChain *tC, string sample = "bla", string wha
 
         cut_pre = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 2);
 
-        cut_pre_softid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 3 && ((((V0_trk1_mu_index[bhad] == 0) ^ (V0_trk2_mu_index[bhad] == 0)) && MuonId_hlt_pt[1] > 0 && MuonId_hlt_pt[2] > 0) || (((V0_trk1_mu_index[bhad] == 1) ^ (V0_trk2_mu_index[bhad] == 1)) && MuonId_hlt_pt[0] > 0 && MuonId_hlt_pt[2] > 0) || (((V0_trk1_mu_index[bhad] == 2) ^ (V0_trk2_mu_index[bhad] == 2)) && MuonId_hlt_pt[0] > 0 && MuonId_hlt_pt[1] > 0)) && ((Muon_isGlobal[V0_trk1_mu_index[bhad]] && Muon_isTracker[V0_trk1_mu_index[bhad]] && Muon_looseId[V0_trk1_mu_index[bhad]]) || (Muon_isGlobal[V0_trk2_mu_index[bhad]] && Muon_isTracker[V0_trk2_mu_index[bhad]] && Muon_looseId[V0_trk2_mu_index[bhad]])));
+        cut_pre_softid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 3 && ((((V0_trk1_mu_index[bhad] == 0) ^ (V0_trk2_mu_index[bhad] == 0)) && MuonId_hlt_pt[1] > 0 && MuonId_hlt_pt[2] > 0) || (((V0_trk1_mu_index[bhad] == 1) ^ (V0_trk2_mu_index[bhad] == 1)) && MuonId_hlt_pt[0] > 0 && MuonId_hlt_pt[2] > 0) || (((V0_trk1_mu_index[bhad] == 2) ^ (V0_trk2_mu_index[bhad] == 2)) && MuonId_hlt_pt[0] > 0 && MuonId_hlt_pt[1] > 0)) && ((Muon_isGlobal[V0_trk1_mu_index[bhad]] && Muon_isTracker[V0_trk1_mu_index[bhad]] && Muon_highPurity[V0_trk1_mu_index[bhad]] && Muon_looseId[V0_trk1_mu_index[bhad]]) || (Muon_isGlobal[V0_trk2_mu_index[bhad]] && Muon_isTracker[V0_trk2_mu_index[bhad]] && Muon_highPurity[V0_trk2_mu_index[bhad]] && Muon_looseId[V0_trk2_mu_index[bhad]])));
 
         cut_pre_medid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 3 && ((((V0_trk1_mu_index[bhad] == 0) ^ (V0_trk2_mu_index[bhad] == 0)) && MuonId_hlt_pt[1] > 0 && MuonId_hlt_pt[2] > 0) || (((V0_trk1_mu_index[bhad] == 1) ^ (V0_trk2_mu_index[bhad] == 1)) && MuonId_hlt_pt[0] > 0 && MuonId_hlt_pt[2] > 0) || (((V0_trk1_mu_index[bhad] == 2) ^ (V0_trk2_mu_index[bhad] == 2)) && MuonId_hlt_pt[0] > 0 && MuonId_hlt_pt[1] > 0)) && (Muon_mediumId[V0_trk1_mu_index[bhad]] || Muon_mediumId[V0_trk2_mu_index[bhad]]));
 
@@ -683,7 +687,7 @@ void plotFakenew::sbsDistributions(TChain *tC, string sample = "bla", string wha
 
         cut_pre = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 2);
 
-        cut_pre_softid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 3 && ((((V0_trk1_mu_index[bhad] == 0) ^ (V0_trk2_mu_index[bhad] == 0)) && MuonId_hlt_lowmass[1] > 0 && MuonId_hlt_lowmass[2] > 0) || (((V0_trk1_mu_index[bhad] == 1) ^ (V0_trk2_mu_index[bhad] == 1)) && MuonId_hlt_lowmass[0] > 0 && MuonId_hlt_lowmass[2] > 0) || (((V0_trk1_mu_index[bhad] == 2) ^ (V0_trk2_mu_index[bhad] == 2)) && MuonId_hlt_lowmass[0] > 0 && MuonId_hlt_lowmass[1] > 0)) && ((Muon_isGlobal[V0_trk1_mu_index[bhad]] && Muon_isTracker[V0_trk1_mu_index[bhad]] && Muon_looseId[V0_trk1_mu_index[bhad]]) || (Muon_isGlobal[V0_trk2_mu_index[bhad]] && Muon_isTracker[V0_trk2_mu_index[bhad]] && Muon_looseId[V0_trk2_mu_index[bhad]])));
+        cut_pre_softid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 3 && ((((V0_trk1_mu_index[bhad] == 0) ^ (V0_trk2_mu_index[bhad] == 0)) && MuonId_hlt_lowmass[1] > 0 && MuonId_hlt_lowmass[2] > 0) || (((V0_trk1_mu_index[bhad] == 1) ^ (V0_trk2_mu_index[bhad] == 1)) && MuonId_hlt_lowmass[0] > 0 && MuonId_hlt_lowmass[2] > 0) || (((V0_trk1_mu_index[bhad] == 2) ^ (V0_trk2_mu_index[bhad] == 2)) && MuonId_hlt_lowmass[0] > 0 && MuonId_hlt_lowmass[1] > 0)) && ((Muon_isGlobal[V0_trk1_mu_index[bhad]] && Muon_isTracker[V0_trk1_mu_index[bhad]] && Muon_highPurity[V0_trk1_mu_index[bhad]] && Muon_looseId[V0_trk1_mu_index[bhad]]) || (Muon_isGlobal[V0_trk2_mu_index[bhad]] && Muon_isTracker[V0_trk2_mu_index[bhad]] && Muon_highPurity[V0_trk2_mu_index[bhad]] && Muon_looseId[V0_trk2_mu_index[bhad]])));
 
         cut_pre_medid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && nMuon == 3 && ((((V0_trk1_mu_index[bhad] == 0) ^ (V0_trk2_mu_index[bhad] == 0)) && MuonId_hlt_lowmass[1] > 0 && MuonId_hlt_lowmass[2] > 0) || (((V0_trk1_mu_index[bhad] == 1) ^ (V0_trk2_mu_index[bhad] == 1)) && MuonId_hlt_lowmass[0] > 0 && MuonId_hlt_lowmass[2] > 0) || (((V0_trk1_mu_index[bhad] == 2) ^ (V0_trk2_mu_index[bhad] == 2)) && MuonId_hlt_lowmass[0] > 0 && MuonId_hlt_lowmass[1] > 0)) && (Muon_mediumId[V0_trk1_mu_index[bhad]] || Muon_mediumId[V0_trk2_mu_index[bhad]]) && HLT_Dimuon_Lowmass);
 
@@ -781,7 +785,7 @@ void plotFakenew::sbsDistributions(TChain *tC, string sample = "bla", string wha
 
         cut_pre = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0)) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && HLT_Ele30);
 
-        cut_pre_softid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0 && V0_trk1_mu_index[bhad] >= 0 && Muon_isGlobal[V0_trk1_mu_index[bhad]] && Muon_isTracker[V0_trk1_mu_index[bhad]] && Muon_looseId[V0_trk1_mu_index[bhad]]) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0 && V0_trk2_mu_index[bhad] >= 0 && Muon_looseId[V0_trk2_mu_index[bhad]] && Muon_isGlobal[V0_trk2_mu_index[bhad]] && Muon_isTracker[V0_trk2_mu_index[bhad]])) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && HLT_Ele30);
+        cut_pre_softid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0 && V0_trk1_mu_index[bhad] >= 0 && Muon_isGlobal[V0_trk1_mu_index[bhad]] && Muon_isTracker[V0_trk1_mu_index[bhad]] && Muon_highPurity[V0_trk1_mu_index[bhad]] && Muon_looseId[V0_trk1_mu_index[bhad]]) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0 && V0_trk2_mu_index[bhad] >= 0 && Muon_looseId[V0_trk2_mu_index[bhad]] && Muon_isGlobal[V0_trk2_mu_index[bhad]] && Muon_isTracker[V0_trk2_mu_index[bhad]] && Muon_highPurity[V0_trk2_mu_index[bhad]])) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && HLT_Ele30);
 
         cut_pre_medid = (((V0_trk1_pt[bhad] > 4 && V0_trk2_pt[bhad] > 1.0 && V0_trk1_mu_index[bhad] >= 0 && Muon_mediumId[V0_trk1_mu_index[bhad]]) || (V0_trk2_pt[bhad] > 4 && V0_trk1_pt[bhad] > 1.0 && V0_trk2_mu_index[bhad] >= 0 && Muon_mediumId[V0_trk2_mu_index[bhad]])) && abs(V0_kin_lxy[bhad]) < lxy_cut && V0_kin_vtx_chi2dof[bhad] < 3 && V0_kin_cosAlphaXY[bhad] > 0.999 && V0_doca[bhad] < 0.004 && V0_kin_sipPV[bhad] < 3 && V0_trk1_sip[bhad] > 5 && V0_trk2_sip[bhad] > 5 && abs(V0_kin_slxy[bhad]) > 3 && HLT_Ele30);
 
@@ -1235,8 +1239,10 @@ int main()
   RooMsgService::instance().getStream(1).removeTopic(Eval);
   RooMsgService::instance().Print();
 
-  string path = "ks_test/";
-  TString binning = "pT";
+  string path = "ks_highPurityRequirement/";
+  //TString binning = "pT";
+  TString binning = "lxy";
+  cout<<"Output path"<< path <<endl;
 
   plotFakenew c1;
   TChain *tC1 = new TChain("Events");
@@ -1279,6 +1285,13 @@ int main()
   cout<<"Entry Data"<<tC6->GetEntries()<<endl;
   c6.loopOverChain(tC6, Form("MC_combined_522_2022_ks_%s", binning.Data()), "Histproduction", path, binning);
   delete tC6; 
+
+  plotFakenew c7;
+  TChain* tC7 = new TChain("Events");
+  c7.list_dir_file(tC7, "2022_data_combined.txt");
+  cout<<"Entry Data"<<tC7->GetEntries()<<endl;
+  c7.loopOverChain(tC7, Form("data_combined_522_2022_ks_%s", binning.Data()), "Histproduction", path, binning);
+  delete tC7; 
 
   //TODO: the code below is only for dev, remove for prod 
 
